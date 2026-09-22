@@ -1,0 +1,53 @@
+{
+  "name": "banking-ledger-backend",
+  "version": "1.0.0",
+  "description": "Event-Driven Microservices Banking & Double-Entry Ledger Backend",
+  "main": "index.js",
+  "type": "module",
+  "workspaces": [
+    "services/*",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:gateway\" \"npm run dev:auth\" \"npm run dev:account\" \"npm run dev:transaction\" \"npm run dev:notification\"",
+    "dev:gateway": "nodemon services/gateway/src/server.js",
+    "dev:auth": "nodemon services/auth-service/src/server.js",
+    "dev:account": "nodemon services/account-service/src/server.js",
+    "dev:transaction": "nodemon services/transaction-service/src/server.js",
+    "dev:notification": "nodemon services/notification-service/src/server.js",
+    "start": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:account\" \"npm run start:transaction\" \"npm run start:notification\"",
+    "start:gateway": "node services/gateway/src/server.js",
+    "start:auth": "node services/auth-service/src/server.js",
+    "start:account": "node services/account-service/src/server.js",
+    "start:transaction": "node services/transaction-service/src/server.js",
+    "start:notification": "node services/notification-service/src/server.js"
+  },
+  "keywords": [
+    "microservices",
+    "banking",
+    "ledger",
+    "double-entry",
+    "rabbitmq",
+    "redis",
+    "docker"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^5.0.1",
+    "http-proxy-middleware": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.0.0",
+    "nodemailer": "^7.0.7",
+    "redis": "^5.11.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@bank/shared",
+  "version": "1.0.0",
+  "description": "Shared common library for Banking Ledger Microservices",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.9",
+    "jsonwebtoken": "^9.0.3",
+    "redis": "^5.11.0"
+  }
+}

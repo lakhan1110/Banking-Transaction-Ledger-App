@@ -1,0 +1,31 @@
+{
+  "name": "banking-transaction-ledger-app",
+  "version": "1.0.0",
+  "description": "Full-Stack Microservices Banking & Double-Entry Ledger Platform",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix backend run dev\" \"npm --prefix frontend run dev\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install",
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build:frontend": "npm --prefix frontend run build"
+  },
+  "keywords": [
+    "microservices",
+    "banking",
+    "react",
+    "tailwind",
+    "vite",
+    "ledger",
+    "rabbitmq",
+    "redis",
+    "docker"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
