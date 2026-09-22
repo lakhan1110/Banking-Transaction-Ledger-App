@@ -1,0 +1,64 @@
+services:
+  - type: web
+    name: banking-ledger-backend
+    runtime: node
+    plan: free
+    region: oregon
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm run start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: GATEWAY_PORT
+        value: 10000
+      - key: AUTH_SERVICE_PORT
+        value: 5001
+      - key: ACCOUNT_SERVICE_PORT
+        value: 5002
+      - key: TRANSACTION_SERVICE_PORT
+        value: 5003
+      - key: NOTIFICATION_SERVICE_PORT
+        value: 5004
+      - key: AUTH_SERVICE_URL
+        value: http://localhost:5001
+      - key: ACCOUNT_SERVICE_URL
+        value: http://localhost:5002
+      - key: TRANSACTION_SERVICE_URL
+        value: http://localhost:5003
+      - key: MONGODB_URI
+        sync: false
+      - key: AUTH_DB_NAME
+        value: bank_auth
+      - key: ACCOUNT_DB_NAME
+        value: bank_account
+      - key: TRANSACTION_DB_NAME
+        value: bank_transaction
+      - key: JWT_SECRET
+        sync: false
+      - key: REDIS_URI
+        sync: false
+      - key: RABBITMQ_URI
+        sync: false
+      - key: MAIL_QUEUE_NAME
+        value: mail_queue
+      - key: MAIL_RETRY_QUEUE
+        value: mail_retry_queue
+      - key: MAIL_DLQ_QUEUE
+        value: mail_dlq
+      - key: MAIL_MAX_ATTEMPTS
+        value: "3"
+      - key: MAIL_RETRY_DELAY_MS
+        value: "5000"
+      - key: EMAIL_USER
+        sync: false
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      - key: REFRESH_TOKEN
+        sync: false

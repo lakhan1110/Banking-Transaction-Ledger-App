@@ -7,7 +7,7 @@ import { createProxyMiddleware, fixRequestBody } from "http-proxy-middleware";
 import { correlationIdMiddleware, errorHandler } from "@bank/shared";
 
 const app = express();
-const port = process.env.GATEWAY_PORT || 8080;
+const port = process.env.PORT || process.env.GATEWAY_PORT || 8080;
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:5001";
 const ACCOUNT_SERVICE_URL = process.env.ACCOUNT_SERVICE_URL || "http://localhost:5002";

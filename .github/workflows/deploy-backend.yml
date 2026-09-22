@@ -1,0 +1,39 @@
+name: Deploy Backend to Render
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - 'render.yaml'
+      - '.github/workflows/deploy-backend.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Trigger Render Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deploy Hook
+        if: env.HAS_HOOK != ''
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          HAS_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          echo "🚀 Triggering automated deployment to Render..."
+          response=$(curl -s -w "%{http_code}" -X POST "$RENDER_DEPLOY_HOOK")
+          http_code="${response: -3}"
+          if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
+            echo "✅ Render deployment triggered successfully! (HTTP $http_code)"
+          else
+            echo "❌ Render deploy hook responded with HTTP $http_code"
+            exit 1
+          fi
+
+      - name: Notice if Deploy Hook not set
+        if: env.HAS_HOOK == ''
+        env:
+          HAS_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          echo "ℹ️ Note: RENDER_DEPLOY_HOOK secret is not set yet in GitHub Secrets."
+          echo "Render will use automatic Git push deployment if connected to your repository."

@@ -1,4 +1,4 @@
-const BASE_URL = ""; // Uses Vite proxy to http://localhost:8080
+const BASE_URL = import.meta.env.VITE_API_URL || "";
 
 export const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem("nexus_token");
