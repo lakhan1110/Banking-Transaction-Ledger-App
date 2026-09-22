@@ -67,13 +67,23 @@ export const startMailConsumer = async () => {
         async (msg) => {
           if (!msg) return;
 
-          const routingKey = msg.fields?.routingKey;
           const headers = msg.properties?.headers || {};
+          let routingKey = headers.originalRoutingKey || msg.fields?.routingKey;
           const attempts = Number(headers.attempts || 0);
 
           try {
             const payload = JSON.parse(msg.content.toString());
-            console.log(`📥 [Notification Service] Processing event [${routingKey}] for ${payload.userEmail} (Type: ${payload.type || "N/A"})`);
+            const recipient = payload.userEmail || payload.email || "Unknown";
+
+            // Fallback: If routingKey was overridden by dead-letter retry
+            if (!routingKey || routingKey === MAIL_QUEUE) {
+              if (payload.otp) routingKey = EventTypes.AUTH_OTP_REQUESTED;
+              else if (payload.email && payload.name && !payload.amount) routingKey = EventTypes.AUTH_USER_REGISTERED;
+              else if (payload.reason) routingKey = EventTypes.TRANSACTION_FAILED;
+              else if (payload.amount) routingKey = EventTypes.TRANSACTION_COMPLETED;
+            }
+
+            console.log(`📥 [Notification Service] Processing event [${routingKey}] for ${recipient} (Type: ${payload.type || "N/A"})`);
 
             let emailData = null;
 
@@ -134,7 +144,7 @@ export const startMailConsumer = async () => {
               try {
                 channel.sendToQueue(DLQ_QUEUE, msg.content, {
                   persistent: true,
-                  headers: { ...headers, attempts: attempts + 1, error: err.message },
+                  headers: { ...headers, attempts: attempts + 1, originalRoutingKey: routingKey, error: err.message },
                 });
                 channel.ack(msg);
               } catch (dlqErr) {
@@ -145,7 +155,7 @@ export const startMailConsumer = async () => {
                 channel.sendToQueue(RETRY_QUEUE, msg.content, {
                   persistent: true,
                   expiration: String(RETRY_DELAY_MS),
-                  headers: { ...headers, attempts: attempts + 1 },
+                  headers: { ...headers, attempts: attempts + 1, originalRoutingKey: routingKey },
                 });
                 channel.ack(msg);
               } catch (retryErr) {

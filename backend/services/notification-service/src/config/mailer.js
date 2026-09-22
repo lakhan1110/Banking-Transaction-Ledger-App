@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import dns from "dns";
+dns.setDefaultResultOrder("ipv4first");
+
 import nodemailer from "nodemailer";
 
 const authConfig = process.env.EMAIL_PASS
@@ -17,8 +20,16 @@ const authConfig = process.env.EMAIL_PASS
     };
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: authConfig,
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
+  tls: {
+    rejectUnauthorized: false,
+  },
 });
 
 export const verifyEmailTransporter = async () => {
