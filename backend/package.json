@@ -15,7 +15,8 @@
     "dev:account": "nodemon services/account-service/src/server.js",
     "dev:transaction": "nodemon services/transaction-service/src/server.js",
     "dev:notification": "nodemon services/notification-service/src/server.js",
-    "start": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:account\" \"npm run start:transaction\" \"npm run start:notification\"",
+    "start": "node start.js",
+    "start:concurrent": "concurrently \"npm run start:gateway\" \"npm run start:auth\" \"npm run start:account\" \"npm run start:transaction\" \"npm run start:notification\"",
     "start:gateway": "node services/gateway/src/server.js",
     "start:auth": "node services/auth-service/src/server.js",
     "start:account": "node services/account-service/src/server.js",
@@ -36,6 +37,7 @@
   "dependencies": {
     "amqplib": "^0.10.4",
     "bcrypt": "^5.1.1",
+    "concurrently": "^9.1.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.3.1",
@@ -47,7 +49,6 @@
     "redis": "^5.11.0"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2",
     "nodemon": "^3.1.9"
   }
 }
